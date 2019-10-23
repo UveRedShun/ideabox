@@ -1,5 +1,5 @@
 <template>
-    <h3>Home</h3>
+    <h3>Ideas show</h3>
 </template>
 
 <script>
