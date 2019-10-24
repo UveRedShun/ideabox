@@ -14,6 +14,8 @@ import IdeasEdit from './views/ideas/Edit.vue';
 Vue.use(Router)
 
 export default new Router({
+    /* URLの＃が消える */
+    mode: 'history',
     routes: [
         {path: "/", component: Home},
         {path: "/login", component: Login},
