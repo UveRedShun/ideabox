@@ -9,7 +9,7 @@ import Edit from './views/users/Edit.vue';
 import IdeasIndex from './views/ideas/Index.vue';
 import IdeasShow from './views/ideas/Show.vue';
 import IdeasEdit from './views/ideas/Edit.vue';
-
+import store from './store';
 
 Vue.use(Router)
 
@@ -18,12 +18,41 @@ export default new Router({
     mode: 'history',
     routes: [
         {path: "/", component: Home},
-        {path: "/login", component: Login},
-        {path: "/registration", component: Register},
+        {path: "/login", 
+        component: Login,
+            beforeEnter(to, from, next) {
+                if (store.getters.idToken) {
+                    next('/ideas');
+                } else {
+                    next();
+                }
+                }
+        },
+        {
+            path: "/registration", 
+            component: Register,
+            beforeEnter(to, from, next) {
+                if (store.getters.idToken) {
+                    next('/ideas');
+                } else {
+                    next();
+                }
+            }
+        },
         {path: "/users", component: Index},
         {path: "/users/:id", component: Show},
         {path: "/users/:id/edit", component: Edit},
-        {path: "/ideas", component: IdeasIndex},
+        {
+            path: "/ideas", 
+            component: IdeasIndex,
+            beforeEnter(to, from, next) {
+                if (store.getters.idToken) {
+                    next();
+                } else {
+                    next('/login');
+                }
+            }
+        },
         {path: "/ideas/:id", component: IdeasShow},
         {path: "/ideas/:id/edit", component: IdeasEdit},
     ]

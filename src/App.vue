@@ -1,43 +1,47 @@
 <template>
-  <div>
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <router-view></router-view>
-  </div>
+    <div>
+        <header class="container-fluid bg-dark py-2">
+            <div class="col-12">
+                <nav class="navbar culturepage-navbar justify-content-center">
+                    <ul class="nav culturepage-nav-list nav-img">
+                        <template v-if = "isAuthenticated">
+                            <li><router-link to ="/ideas" class="text-white mx-3">IdeaBox</router-link></li>
+                            <li><span class="text-white btn-header" @click="logout">Logout</span></li>
+                        </template>
+                        <template v-if = "!isAuthenticated">
+                            <li><router-link to ="/" class="text-white">Home</router-link></li>
+                            <li class="mx-3"><router-link to ="/login" class="text-white">ログイン</router-link></li>
+                            <li><router-link to ="/registration" class="text-white">新規登録</router-link></li>
+                        </template>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        <div class="justify-content-center text-center">
+            <img alt="Vue logo" src="./assets/logo.png">
+        </div>
+        <router-view></router-view>
+    </div>
 </template>
 
 <script>
-import axios from "axios";
 export default {
-    data(){
-        return{
-            name: "",
-            idea: "",
-            posts: []
-        };
+    computed: {
+        isAuthenticated() {
+            return this.$store.getters.idToken !== null;
+        }
     },
     methods: {
-        createIdea(){
-            // 第一引数：URL,第二引数：送りたいデータ,第三引数：詳細な設定
-            axios.post(
-                "https://firestore.googleapis.com/v1/projects/ideabox-8b0eb/databases/(default)/documents/idea",
-                {
-                    fields: {
-                        name: {
-                            stringValue: this.name
-                        },
-                        idea: {
-                            stringValue: this.idea
-                        }
-                    }
-                }
-            );
-            this.name = "";
-            this.comment = "";
+        logout() {
+            this.$store.dispatch('logout');
         }
     }
 };
 </script>
 
 <style>
+
+.btn-header{
+    cursor: pointer;
+}
 </style>
